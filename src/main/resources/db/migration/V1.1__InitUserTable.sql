@@ -7,7 +7,7 @@ CREATE TABLE users (
     date_created DATE NOT NULL DEFAULT CURRENT_DATE
 );--ENGINE=INNODB;
 
-CREATE TABLE role (
+CREATE TABLE testUser (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     description VARCHAR(100) DEFAULT NULL
@@ -17,5 +17,5 @@ CREATE TABLE users_roles (
     user_id BIGINT NOT NULL,
     role_id BIGINT DEFAULT 1,
     FOREIGN KEY (user_id) REFERENCES users (id),
-    FOREIGN KEY (role_id) REFERENCES role (id)
+    FOREIGN KEY (role_id) REFERENCES testUser (id)
 );--ENGINE=INNODB;

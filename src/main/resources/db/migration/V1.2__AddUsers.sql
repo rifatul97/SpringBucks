@@ -4,7 +4,7 @@ VALUES ('rifat', 'karim', 'rifat97@gmail.com', 'pass'),
 ('honey', 'moon', 'honnymoon@amazon.com', 'pass'),
 ('chance', 'robert', 'croboertisamazing@gmail.com', 'pass');
 
-INSERT INTO role (name, description) VALUES
+INSERT INTO testUser (name, description) VALUES
 ('ROLE_CUSTOMER', 'Can track order and check their profile.'),
 ('ROLE_BARISTA', 'Has access to customers orders.'),
 ('ROLE_ADMIN', 'Has access to all.');

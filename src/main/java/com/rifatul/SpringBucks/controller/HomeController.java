@@ -2,9 +2,7 @@ package com.rifatul.SpringBucks.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
@@ -16,9 +14,15 @@ public class HomeController {
         return "hello world.";
     }
 
-    @GetMapping("/reponse")
-    public ResponseEntity<String> responseEntityHome() {
-        return ResponseEntity.ok(String.valueOf(100));
+    record BasicBody(int id, String firstname, String lastname) {
+        public String fullname() {
+            return String.format("%s %s", firstname(), lastname());
+        }
+    }
+
+    @PostMapping
+    public String home3(@RequestBody BasicBody body) {
+        return body.fullname();
     }
 
 }

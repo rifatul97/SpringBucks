@@ -29,17 +29,18 @@ public class UserDataAccessService implements UserDao {
 
     @Override
     public void insert(String firstname, String lastname, String email, String password) {
+        log.info("step 3.7");
         var insertUser = getQuery("insert_user");
         var insertUserRole = getQuery("insert_user_roles");
         jdbcTemplate.update(
                 insertUser, firstname, lastname, email, password
         );
-
-        Optional<User> newUser = this.selectByEmail(email);
+        log.info("step 3.8");
+        User newUser = this.selectByEmail(email).get();
 
         jdbcTemplate.update(
                 insertUserRole,
-                newUser.get().id()
+                newUser.id()
         );
 
     }

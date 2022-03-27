@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -20,13 +22,22 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.security.web.authentication.*;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+
+import static java.util.Objects.requireNonNull;
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+//
+//    @Override
+//    public void configure(final WebSecurity web) {
+//        web.ignoring().requestMatchers(PUBLIC_URLS);
+//    }
 
     @Autowired
     private UserService userService;
@@ -42,6 +53,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter("/api/v1/users/login", authenticationManager());
+
         //customAuthenticationFilter.setFilterProcessesUrl("/api/user/login");
 
         http.csrf().disable()
@@ -49,11 +61,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and().authorizeRequests()
 //                .antMatchers(HttpMethod.POST, "/api/v1/users/login").permitAll()
                 .antMatchers(HttpMethod.GET, "/").permitAll()
+                .antMatchers(HttpMethod.POST, "/").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/users/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/users/logout").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/users/register").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/users/orders").access("hasAuthority('BARISTA') and hasAuthority('ADMIN')")
-                //.antMatchers(HttpMethod.GET, "/api/v1/users/all").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST, "/api/v1/users/updateRole").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/api/v1/dashboard/users").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()
@@ -65,6 +78,18 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addFilterAfter(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(customAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 ;
+    }
+
+    private static final RequestMatcher PUBLIC_URLS = new OrRequestMatcher(
+            new AntPathRequestMatcher("/"), new AntPathRequestMatcher("/public/**")
+    );
+
+    private static final RequestMatcher PROTECTED_URLS = new NegatedRequestMatcher(PUBLIC_URLS);
+
+
+    @Bean
+    AuthenticationEntryPoint forbiddenEntryPoint() {
+        return new HttpStatusEntryPoint(HttpStatus.FORBIDDEN);
     }
 
     @Bean
@@ -79,14 +104,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         //successHandler.setRedirectStrategy(new NoRedirectStrategy());
         return successHandler;
     }
-
-    private static final RequestMatcher PUBLIC_URLS = new OrRequestMatcher(
-            new AntPathRequestMatcher("/api/v1/**"), new AntPathRequestMatcher("/public/**")
-    );
-
-    private static final RequestMatcher PROTECTED_URLS = new OrRequestMatcher(
-            new AntPathRequestMatcher("/api/**")
-    );
 
 }
 

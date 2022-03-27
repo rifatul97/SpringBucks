@@ -30,6 +30,7 @@ public class UserService {
     }
 
     public Iterable<User> findAllUsers() {
+        log.info("finding all the users");
         return userDao.getAll();
     }
 
@@ -38,8 +39,11 @@ public class UserService {
     }
 
     public User register(UserRegisterRequest newUser) throws UserEmailAlreadyExistException {
+        log.info("step 3.5");
         throwExceptionIfUserEmailAlreadyExist(newUser.email(), userDao);
+        log.info("step 3.6");
         userDao.insert(newUser.firstname(), newUser.lastname(), newUser.email(), newUser.password());
+        log.info("step 3.99");
         return userDao.selectByEmail(newUser.email()).get();
     }
 
