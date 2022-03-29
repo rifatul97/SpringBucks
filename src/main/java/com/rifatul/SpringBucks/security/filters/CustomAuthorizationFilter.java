@@ -33,7 +33,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     private AntPathMatcher pathMatcher = new AntPathMatcher();
 
     public static final List<String> NON_AUTH_END_POINTS
-            = Collections.unmodifiableList(Arrays.asList("/", "/api/v1/categories", "/api/v1/products"));
+            = Collections.unmodifiableList(Arrays.asList("/", "/api/v1/categories", "/api/v1/products", "/api/v1/products/update"));
 
     //@CrossOrigin(origins = "http://localhost:3000")
     @Override

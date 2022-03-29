@@ -3,7 +3,7 @@ package com.rifatul.SpringBucks.service;
 import com.rifatul.SpringBucks.dao.RoleDao;
 import com.rifatul.SpringBucks.dao.UserDao;
 import com.rifatul.SpringBucks.domain.dto.UpdateUserRoleRequest;
-import com.rifatul.SpringBucks.exception.types.UserEmailAlreadyExistException;
+import com.rifatul.SpringBucks.exception.UserEmailAlreadyExistException;
 
 public class UserValidatorService {
 

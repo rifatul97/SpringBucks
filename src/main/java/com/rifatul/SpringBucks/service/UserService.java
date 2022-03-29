@@ -5,7 +5,7 @@ import com.rifatul.SpringBucks.dao.UserDao;
 import com.rifatul.SpringBucks.domain.dto.UpdateUserRoleRequest;
 import com.rifatul.SpringBucks.domain.dto.UserRegisterRequest;
 import com.rifatul.SpringBucks.domain.model.User;
-import com.rifatul.SpringBucks.exception.types.UserEmailAlreadyExistException;
+import com.rifatul.SpringBucks.exception.UserEmailAlreadyExistException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,11 +39,8 @@ public class UserService {
     }
 
     public User register(UserRegisterRequest newUser) throws UserEmailAlreadyExistException {
-        log.info("step 3.5");
         throwExceptionIfUserEmailAlreadyExist(newUser.email(), userDao);
-        log.info("step 3.6");
         userDao.insert(newUser.firstname(), newUser.lastname(), newUser.email(), newUser.password());
-        log.info("step 3.99");
         return userDao.selectByEmail(newUser.email()).get();
     }
 

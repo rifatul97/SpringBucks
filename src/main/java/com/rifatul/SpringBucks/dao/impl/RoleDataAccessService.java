@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.rifatul.SpringBucks.utils.GetSQLQuery.getQuery;
+import static com.rifatul.SpringBucks.utils.GetSQLQuery.getSQLQuery;
 
 @Repository
 @AllArgsConstructor
@@ -22,13 +22,13 @@ public class RoleDataAccessService implements RoleDao {
 
     @Override
     public List<Role> getRoles(int userId) {
-        var sql = getQuery("select_user_roles");
+        var sql = getSQLQuery("select_user_roles");
         return jdbcTemplate.query(sql, new RoleRowMapper(), userId);
     }
 
     @Override
     public void update(UpdateUserRoleRequest request) {
-        var updateUserRole = getQuery("update_user_role");
+        var updateUserRole = getSQLQuery("update_user_role");
         jdbcTemplate.update(updateUserRole, request.roleId(), request.userId());
     }
 }

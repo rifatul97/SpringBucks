@@ -32,21 +32,21 @@ class DashboardControllerTest {
     private final String get_all_users = base_api_test + "/users";
 
     @Test
-    @DisplayName("return access denied error if anonymous user tries accesses user/all api")
+    @DisplayName("accessing user/all api as admin role return access denied error")
     public void test0() throws Exception {
         mockMvc.perform(get(get_all_users))
                 .andExpect(status().is(HttpStatus.FORBIDDEN.value()));
     }
 
     @Test
-    @DisplayName("return access denied error if barista tries accesses user/all api")
+    @DisplayName("accessing user/all api as barista role return access denied error")
     public void test1() throws Exception {
         mockMvc.perform(get(get_all_users).cookie(generateTemporaryAccessCookie(ROLE_BARISTA)))
                 .andExpect(status().is(HttpStatus.FORBIDDEN.value()));
     }
 
     @Test
-    @DisplayName("returns OK status if admin can access users/all api")
+    @DisplayName("accessing user/all api as admin role outputs status OK")
     public void test2() throws Exception {
         mockMvc.perform(get(get_all_users).cookie(generateTemporaryAccessCookie(ROLE_ADMIN)))
                 .andExpect(status().is(HttpStatus.OK.value()));

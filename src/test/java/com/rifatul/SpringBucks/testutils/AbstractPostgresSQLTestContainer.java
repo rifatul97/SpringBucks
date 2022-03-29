@@ -12,6 +12,7 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.Map;
 
@@ -19,6 +20,7 @@ import static java.lang.System.getProperties;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @RunWith(SpringRunner.class)
+@Testcontainers
 //@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class AbstractPostgresSQLTestContainer {
 
@@ -45,15 +47,7 @@ public abstract class AbstractPostgresSQLTestContainer {
     @AfterAll
     public static void stop() {
         postgressqlcontainer.stop();
-        System.out.println("stopped!");
+        System.out.println("testcontainer has stopped!");
     }
 
-    @Test
-    void test() {
-        assertTrue(postgressqlcontainer.isRunning());
-        System.out.println(postgressqlcontainer.getDatabaseName());
-        System.out.println(postgressqlcontainer.getJdbcUrl());
-        System.out.println(postgressqlcontainer.getDriverClassName());
-        System.out.println(postgressqlcontainer.getTestQueryString());
-    }
 }

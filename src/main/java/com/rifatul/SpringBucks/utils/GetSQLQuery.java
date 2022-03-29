@@ -36,7 +36,7 @@ public class GetSQLQuery {
         return props;
     }
 
-    public static String getQuery(String query) {
+    public static String getSQLQuery(String query) {
         String res = "";
         try {
             res = getPropsFile().getProperty(query);
