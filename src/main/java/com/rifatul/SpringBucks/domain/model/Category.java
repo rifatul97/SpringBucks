@@ -1,4 +1,4 @@
 package com.rifatul.SpringBucks.domain.model;
 
-public record CategoryDto(int id, String name){
+public record Category(int id, String name){
 }

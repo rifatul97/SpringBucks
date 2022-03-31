@@ -1,9 +1,7 @@
 package com.rifatul.SpringBucks.controller;
 
-import com.rifatul.SpringBucks.domain.dto.AddNewProductRequest;
-import com.rifatul.SpringBucks.domain.dto.DeleteProductRequest;
-import com.rifatul.SpringBucks.domain.dto.ProductsByCategoryRequest;
-import com.rifatul.SpringBucks.domain.dto.UpdateProductRequest;
+import com.rifatul.SpringBucks.dao.ProductDTO;
+import com.rifatul.SpringBucks.dao.ProductRequest;
 import com.rifatul.SpringBucks.domain.model.Product;
 import com.rifatul.SpringBucks.service.CategoryService;
 import com.rifatul.SpringBucks.service.ProductService;
@@ -23,13 +21,13 @@ public class ProductController {
     @Autowired private CategoryService categoryService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@RequestParam(value = "id") int id) {
+    public ResponseEntity<ProductDTO.Response> getProductById(@RequestParam(value = "id") int id) {
         return ResponseEntity.ok(null);
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Product>> getProductsByStartingName(@RequestParam(value = "name") String name) {
-        return ResponseEntity.ok(productService.searchByName(name));
+    public ResponseEntity<ProductDTO.Response> getProductsByStartingName(@RequestParam(value = "name") ProductDTO.Request.GetByStartingName request) {
+        return ResponseEntity.ok(productService.searchByName(request));
     }
 
     @GetMapping
@@ -39,18 +37,18 @@ public class ProductController {
     }
 
     @PostMapping("/update")
-    public void updateProductData(@RequestBody UpdateProductRequest request) {
+    public void updateProductData(@RequestBody ProductDTO.Request.Update request) {
         productService.update(request);
     }
 
     @PostMapping("/add")
-    public void addProductData(@RequestBody AddNewProductRequest request) {
+    public void addProductData(@RequestBody ProductDTO.Request.Create request) {
         productService.save(request);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteProductData(@RequestParam(value = "id") int id) {
-        productService.delete(id);
+    public void deleteProductData(@RequestBody ProductDTO.Request.Delete request) {
+        productService.delete(request);
     }
 
 

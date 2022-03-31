@@ -2,8 +2,7 @@ package com.rifatul.SpringBucks.service;
 
 import com.rifatul.SpringBucks.dao.RoleDao;
 import com.rifatul.SpringBucks.dao.UserDao;
-import com.rifatul.SpringBucks.domain.dto.UpdateUserRoleRequest;
-import com.rifatul.SpringBucks.domain.dto.UserRegisterRequest;
+import com.rifatul.SpringBucks.domain.dto.UserDTO;
 import com.rifatul.SpringBucks.domain.model.User;
 import com.rifatul.SpringBucks.exception.UserEmailAlreadyExistException;
 import lombok.RequiredArgsConstructor;
@@ -38,16 +37,17 @@ public class UserService {
         return userDao.selectByEmail(email);
     }
 
-    public User register(UserRegisterRequest newUser) throws UserEmailAlreadyExistException {
-        throwExceptionIfUserEmailAlreadyExist(newUser.email(), userDao);
-        userDao.insert(newUser.firstname(), newUser.lastname(), newUser.email(), newUser.password());
-        return userDao.selectByEmail(newUser.email()).get();
+    public User register(UserDTO.Request.Register request) throws UserEmailAlreadyExistException {
+        throwExceptionIfUserEmailAlreadyExist(request.getEmail(), userDao);
+        userDao.insert(request.getFirstname(), request.getLastname(), request.getEmail(), request.getPassword());
+        return userDao.selectByEmail(request.getEmail()).get();
     }
 
-    public void updateUserRole(UpdateUserRoleRequest request) {
-        throwExceptionIfUserIdDoesNotExist(request, userDao);
-        throwExceptionIfRoleIdDoesNotExist(request, roleDao);
-        roleDao.update(request);
+    public void updateUserRole(UserDTO.Request.UpdateRole request) {
+        throwExceptionIfUserIdDoesNotExist(request.getUserId(), userDao);
+        throwExceptionIfRoleIdDoesNotExist(request.getRoleId(), roleDao);
+
+        roleDao.update(request.getUserId(), request.getRoleId());
     }
 
 }

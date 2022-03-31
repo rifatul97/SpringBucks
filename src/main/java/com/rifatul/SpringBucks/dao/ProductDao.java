@@ -8,7 +8,6 @@ import java.util.Optional;
 
 @Service
 public interface ProductDao {
-    //Streamable
     List<Product> selectByCategoryId(int categoryId);
     Optional<List<Product>> selectByName(String name);
     Optional<Product> selectById(int productId);

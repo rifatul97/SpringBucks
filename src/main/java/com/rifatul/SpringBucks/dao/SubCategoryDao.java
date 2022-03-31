@@ -1,6 +1,6 @@
 package com.rifatul.SpringBucks.dao;
 
-import com.rifatul.SpringBucks.domain.model.CategoryDto;
+import com.rifatul.SpringBucks.domain.model.Category;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,6 +11,6 @@ public interface SubCategoryDao {
     void add(String name);
     void update(int id, String name);
     void delete(int categoryId);
-    Optional<CategoryDto> selectById(int categoryId);
-    List<CategoryDto> selectByParentId(int parentCategoryId);
+    Optional<Category> selectById(int categoryId);
+    List<Category> selectByParentId(int parentCategoryId);
 }

@@ -2,8 +2,7 @@ package com.rifatul.SpringBucks.dao.impl;
 
 import com.rifatul.SpringBucks.dao.ParentCategoryDao;
 import com.rifatul.SpringBucks.dao.mapper.CategoryDtoRowMapper;
-import com.rifatul.SpringBucks.domain.model.CategoryDto;
-import com.rifatul.SpringBucks.domain.model.ParentCategory;
+import com.rifatul.SpringBucks.domain.model.Category;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +21,13 @@ public class ParentCategoryDataAccessService implements ParentCategoryDao {
     private final JdbcTemplate jdbcTemplate;
 
     @Override
-    public List<CategoryDto> selectAll() {
+    public List<Category> selectAll() {
         var sql = String.format(getSQLQuery("select_categories"), "parent_category");
         return jdbcTemplate.query(sql, new CategoryDtoRowMapper());
     }
 
     @Override
-    public Optional<CategoryDto> selectById(int id) {
+    public Optional<Category> selectById(int id) {
         var sql = String.format(getSQLQuery("select_category_by_id"), "parent_category");
         return jdbcTemplate.query(sql, new CategoryDtoRowMapper(), id).stream().findFirst();
     }

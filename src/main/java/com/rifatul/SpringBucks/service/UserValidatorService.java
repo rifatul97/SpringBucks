@@ -2,7 +2,6 @@ package com.rifatul.SpringBucks.service;
 
 import com.rifatul.SpringBucks.dao.RoleDao;
 import com.rifatul.SpringBucks.dao.UserDao;
-import com.rifatul.SpringBucks.domain.dto.UpdateUserRoleRequest;
 import com.rifatul.SpringBucks.exception.UserEmailAlreadyExistException;
 
 public class UserValidatorService {
@@ -14,10 +13,10 @@ public class UserValidatorService {
         }
     }
 
-    public static void throwExceptionIfRoleIdDoesNotExist(UpdateUserRoleRequest request, RoleDao roleDao) {
+    public static void throwExceptionIfRoleIdDoesNotExist(int roleId, RoleDao roleDao) {
     }
 
-    public static void throwExceptionIfUserIdDoesNotExist(UpdateUserRoleRequest request, UserDao userDao) {
+    public static void throwExceptionIfUserIdDoesNotExist(int userId, UserDao userDao) {
     }
 
 }

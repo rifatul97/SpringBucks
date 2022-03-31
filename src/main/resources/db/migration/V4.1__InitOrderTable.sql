@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS orders (
     id SERIAL PRIMARY KEY,
     date_added DATE NOT NULL DEFAULT CURRENT_DATE,
     last_updated DATE NOT NULL DEFAULT CURRENT_DATE,
-    status order_status NOT NULL
+    status TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS user_orders (

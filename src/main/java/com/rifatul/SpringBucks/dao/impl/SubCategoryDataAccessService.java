@@ -2,7 +2,7 @@ package com.rifatul.SpringBucks.dao.impl;
 
 import com.rifatul.SpringBucks.dao.SubCategoryDao;
 import com.rifatul.SpringBucks.dao.mapper.CategoryDtoRowMapper;
-import com.rifatul.SpringBucks.domain.model.CategoryDto;
+import com.rifatul.SpringBucks.domain.model.Category;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,13 +39,13 @@ public class SubCategoryDataAccessService implements SubCategoryDao {
     }
 
     @Override
-    public Optional<CategoryDto> selectById(int id) {
+    public Optional<Category> selectById(int id) {
         var sql = String.format(getSQLQuery("select_category_by_id"), "sub_category");
         return jdbcTemplate.query(sql, new CategoryDtoRowMapper(), id).stream().findFirst();
     }
 
     @Override
-    public List<CategoryDto> selectByParentId(int parentCategoryId) {
+    public List<Category> selectByParentId(int parentCategoryId) {
         var sql = getSQLQuery("select_categories_by_parentId");
         return jdbcTemplate.query(sql, new CategoryDtoRowMapper(), parentCategoryId);
     }

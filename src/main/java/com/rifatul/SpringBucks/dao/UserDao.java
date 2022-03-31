@@ -1,7 +1,5 @@
 package com.rifatul.SpringBucks.dao;
 
-import com.rifatul.SpringBucks.domain.dto.AccountCredentials;
-import com.rifatul.SpringBucks.domain.dto.UserRegisterRequest;
 import com.rifatul.SpringBucks.domain.model.User;
 import org.springframework.stereotype.Service;
 

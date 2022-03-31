@@ -1,28 +1,21 @@
 package com.rifatul.SpringBucks.security.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rifatul.SpringBucks.domain.dto.AccountCredentials;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.rifatul.SpringBucks.security.filters.TokenAuthenticationBuilder.addAuthentication;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
 public class CustomAuthenticationFilter extends AbstractAuthenticationProcessingFilter {

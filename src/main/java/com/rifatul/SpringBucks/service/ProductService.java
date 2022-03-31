@@ -1,9 +1,8 @@
 package com.rifatul.SpringBucks.service;
 
+import com.rifatul.SpringBucks.dao.ProductDTO;
 import com.rifatul.SpringBucks.dao.ProductDao;
 import com.rifatul.SpringBucks.dao.SubCategoryDao;
-import com.rifatul.SpringBucks.domain.dto.AddNewProductRequest;
-import com.rifatul.SpringBucks.domain.dto.UpdateProductRequest;
 import com.rifatul.SpringBucks.domain.model.Product;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,37 +19,37 @@ public class ProductService {
 
     @Autowired private final ProductDao productDao;
     @Autowired private final SubCategoryDao subCategoryDao;
-//    @Autowired private final UserCartDao userCartDao;
+//    @Autowired private final CartDao userCartDao;
 
-    public void save(AddNewProductRequest req) {
-        throwExceptionIfCategoryIdDoesNotExist(req.categoryId(), subCategoryDao);
-        throwExceptionIfPriceIsIncorrectFormat(req.price());
-        throwExceptionIfProductNameAlreadyExist(req.name(), productDao);
+    public void save(ProductDTO.Request.Create req) {
+        throwExceptionIfCategoryIdDoesNotExist(req.getCategoryId(), subCategoryDao);
+        throwExceptionIfPriceIsIncorrectFormat(req.getPrice());
+        throwExceptionIfProductNameAlreadyExist(req.getName(), productDao);
 
-        productDao.save(req.name(), req.price(), req.categoryId());
+        productDao.save(req.getName(), req.getPrice(), req.getCategoryId());
     }
 
-    public void update (UpdateProductRequest req) {
-        throwExceptionIfProductIdDoesNotExist(req.id(), productDao);
-        throwExceptionIfCategoryIdDoesNotExist(req.categoryId(), subCategoryDao);
-        throwExceptionIfPriceIsIncorrectFormat(req.price());
+    public void update (ProductDTO.Request.Update req) {
+        throwExceptionIfProductIdDoesNotExist(req.getId(), productDao);
+        throwExceptionIfCategoryIdDoesNotExist(req.getCategoryId(), subCategoryDao);
+        throwExceptionIfPriceIsIncorrectFormat(req.getPrice());
 //        throwExceptionIfProductIsInUserCart(req.id());
 
-        productDao.updateProduct(req.id(), req.categoryId(), req.price());
+        productDao.updateProduct(req.getId(), req.getCategoryId(), req.getPrice());
     }
 
-    public void delete (int productId) {
-        throwExceptionIfProductIdDoesNotExist(productId, productDao);
+    public void delete (ProductDTO.Request.Delete request) {
+        throwExceptionIfProductIdDoesNotExist(request.getId(), productDao);
 //        throwExceptionIfProductIsInUserCart(req.id());
 
-        productDao.deleteProduct(productId);
+        productDao.deleteProduct(request.getId());
     }
 
-    public List<Product> searchByName(String name) {
-        List<Product> productsByName = productDao.selectByName(name)
+    public ProductDTO.Response searchByName(ProductDTO.Request.GetByStartingName request) {
+        List<Product> productsByName = productDao.selectByName(request.getName())
                 .orElseThrow(RuntimeException::new);
 
-        return productsByName;
+        return new ProductDTO.Response.Public(productsByName);
     }
 
     public List<Product> productByCategory(int categoryId) {

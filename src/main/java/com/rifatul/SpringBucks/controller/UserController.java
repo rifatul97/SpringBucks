@@ -1,8 +1,10 @@
 package com.rifatul.SpringBucks.controller;
 
-import com.rifatul.SpringBucks.domain.dto.UserRegisterRequest;
+import com.rifatul.SpringBucks.domain.dto.OrderDTO;
+import com.rifatul.SpringBucks.domain.dto.UserDTO;
+import com.rifatul.SpringBucks.domain.model.Order;
 import com.rifatul.SpringBucks.domain.model.User;
-import com.rifatul.SpringBucks.exception.UserEmailAlreadyExistException;
+import com.rifatul.SpringBucks.service.OrderService;
 import com.rifatul.SpringBucks.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,9 +28,10 @@ import static com.rifatul.SpringBucks.security.filters.TokenAuthenticationBuilde
 public class UserController {
 
     @Autowired private UserService userService;
+    @Autowired private OrderService orderService;
 
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody UserRegisterRequest newUser) throws ResponseStatusException{
+    public ResponseEntity<User> registerUser(@RequestBody UserDTO.Request.Register newUser) throws ResponseStatusException{
         User user= userService.register(newUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
@@ -39,20 +42,29 @@ public class UserController {
     }
 
     @GetMapping("/current")
-    public ResponseEntity<String> getLoggedInUser() {
+    public ResponseEntity<User> getLoggedInUser() {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
             return ResponseEntity.notFound().build();
         }
         String currentPrincipalName = authentication.getName();
         Optional<User> user = userService.findUserByEmail(currentPrincipalName);
-        return ResponseEntity.ok(authentication.getAuthorities().toString());
+
+        return ResponseEntity.ok(user.get());
     }
 
 
     @GetMapping("/orders")
-    public ResponseEntity<String> getCurrentUserOrder() {
-        return ResponseEntity.ok("no orders");//orderService.getUsersOrderIdsByUserIdAndStatus(request);
+    public ResponseEntity<Order> getCurrentUserOrder() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return ResponseEntity.notFound().build();
+        }
+        String currentPrincipalName = authentication.getName();
+        Optional<User> user = userService.findUserByEmail(currentPrincipalName);
+
+        return ResponseEntity.ok(orderService.getUserOrderId(user.get().id()));
     }
 
     @GetMapping("/hello")

@@ -2,7 +2,6 @@ package com.rifatul.SpringBucks.dao.impl;
 
 import com.rifatul.SpringBucks.dao.RoleDao;
 import com.rifatul.SpringBucks.dao.mapper.RoleRowMapper;
-import com.rifatul.SpringBucks.domain.dto.UpdateUserRoleRequest;
 import com.rifatul.SpringBucks.domain.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,8 +26,8 @@ public class RoleDataAccessService implements RoleDao {
     }
 
     @Override
-    public void update(UpdateUserRoleRequest request) {
+    public void update(int userId, int roleId) {
         var updateUserRole = getSQLQuery("update_user_role");
-        jdbcTemplate.update(updateUserRole, request.roleId(), request.userId());
+        jdbcTemplate.update(updateUserRole, userId, roleId);
     }
 }
