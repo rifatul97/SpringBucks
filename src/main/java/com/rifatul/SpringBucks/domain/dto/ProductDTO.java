@@ -6,7 +6,6 @@ public final class ProductDTO {
         record Create (String name, double price, int categoryId) implements Request {}
         record Update (int id, double price, int categoryId) implements Request {}
         record Delete (int id) implements Request {}
-        Product
     }
 
 

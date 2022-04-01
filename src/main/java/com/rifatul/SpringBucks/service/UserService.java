@@ -38,16 +38,16 @@ public class UserService {
     }
 
     public User register(UserDTO.Request.Register request) throws UserEmailAlreadyExistException {
-        throwExceptionIfUserEmailAlreadyExist(request.getEmail(), userDao);
-        userDao.insert(request.getFirstname(), request.getLastname(), request.getEmail(), request.getPassword());
-        return userDao.selectByEmail(request.getEmail()).get();
+        throwExceptionIfUserEmailAlreadyExist(request.email(), userDao);
+        userDao.insert(request.firstname(), request.lastname(), request.email(), request.password());
+        return userDao.selectByEmail(request.email()).get();
     }
 
     public void updateUserRole(UserDTO.Request.UpdateRole request) {
-        throwExceptionIfUserIdDoesNotExist(request.getUserId(), userDao);
-        throwExceptionIfRoleIdDoesNotExist(request.getRoleId(), roleDao);
+        throwExceptionIfUserIdDoesNotExist(request.userId(), userDao);
+        throwExceptionIfRoleIdDoesNotExist(request.roleId(), roleDao);
 
-        roleDao.update(request.getUserId(), request.getRoleId());
+        roleDao.update(request.userId(), request.roleId());
     }
 
 }

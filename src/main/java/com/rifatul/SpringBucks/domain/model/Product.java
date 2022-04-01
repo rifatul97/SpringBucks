@@ -1,5 +1,6 @@
 package com.rifatul.SpringBucks.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ public class Product {
     private int id;
     private String name;
     private double price;
+    @JsonIgnore
     private int categoryId;
 
 }

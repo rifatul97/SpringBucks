@@ -43,7 +43,7 @@ public class KitchenService {
         List<List<CartItem>> ordersList = Collections.emptyList();
 
         for (Order customerOrder : customerOrdersList) {
-            List<CartItem> cartItemsByOrderId = cartDao.selectByOrderId(customerOrder.orderId());
+            List<CartItem> cartItemsByOrderId = cartDao.selectByOrderId(customerOrder.id());
             ordersList.add(cartItemsByOrderId);
         }
 

@@ -25,13 +25,15 @@ public class CustomAuthenticationFilter extends AbstractAuthenticationProcessing
         setAuthenticationManager(authManager);
     }
 
+    record AccountCredentials (String email, String password) {}
+
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
             System.out.println("attempting NOW ---");
             AccountCredentials creds = new ObjectMapper().readValue(request.getInputStream(), AccountCredentials.class);
-            log.info("{}", creds.getEmail());
-            return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(creds.getEmail(), creds.getPassword() //,Collections.emptyList()
+            log.info("{}", creds.email());
+            return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(creds.email(), creds.password() //,Collections.emptyList()
             ));
         } catch (IOException e) {
             response.setStatus(333);

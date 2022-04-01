@@ -36,7 +36,8 @@ public class OrderDataAccessService implements OrderDao {
 
     @Override
     public void mapIdToUser(int userId, long orderId) {
-        var sql = getSQLQuery("map_user_order");
+        var sql = getSQLQuery("insert_orderId_to_a_user");
+        log.info("mapping order id to user");
         jdbcTemplate.update(sql, userId, orderId);
     }
 
@@ -49,6 +50,7 @@ public class OrderDataAccessService implements OrderDao {
     @Override
     public Optional<Order> selectByUserId(int userId) {
         var sql = getSQLQuery("select_orderId_by_userId");
+        log.info("getting em it!");
         return jdbcTemplate.query(sql, new OrderRowMapper(), userId).stream().findFirst();
     }
 

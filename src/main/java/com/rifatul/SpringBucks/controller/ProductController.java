@@ -1,7 +1,6 @@
 package com.rifatul.SpringBucks.controller;
 
-import com.rifatul.SpringBucks.dao.ProductDTO;
-import com.rifatul.SpringBucks.dao.ProductRequest;
+import com.rifatul.SpringBucks.domain.dto.ProductDTO;
 import com.rifatul.SpringBucks.domain.model.Product;
 import com.rifatul.SpringBucks.service.CategoryService;
 import com.rifatul.SpringBucks.service.ProductService;
@@ -21,13 +20,13 @@ public class ProductController {
     @Autowired private CategoryService categoryService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDTO.Response> getProductById(@RequestParam(value = "id") int id) {
+    public ResponseEntity<Product> getProductById(@RequestParam(value = "id") int id) {
         return ResponseEntity.ok(null);
     }
 
     @GetMapping("/search")
-    public ResponseEntity<ProductDTO.Response> getProductsByStartingName(@RequestParam(value = "name") ProductDTO.Request.GetByStartingName request) {
-        return ResponseEntity.ok(productService.searchByName(request));
+    public ResponseEntity<List<Product>> getProductsByStartingName(@RequestParam(value = "name") String name) {
+        return ResponseEntity.ok(productService.searchByName(name));
     }
 
     @GetMapping
@@ -37,7 +36,7 @@ public class ProductController {
     }
 
     @PostMapping("/update")
-    public void updateProductData(@RequestBody ProductDTO.Request.Update request) {
+    public void updateProductData(@RequestBody ProductDTO.Request.Update request) throws InterruptedException {
         productService.update(request);
     }
 
@@ -47,7 +46,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteProductData(@RequestBody ProductDTO.Request.Delete request) {
+    public void deleteProductData(@RequestBody ProductDTO.Request.Delete request) throws InterruptedException {
         productService.delete(request);
     }
 

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CartDao {
-    void addCartItem(int cartItemsId, int productId, int quantity);
+    void addCartItem(long orderId, int productId, int quantity);
     void updateCartItem (int cartItemId, int productId, int quantity);
     void deleteCartItem (int cartItemId);
     Optional<CartItem> selectById(int cartId);

@@ -15,7 +15,7 @@ public final class UserDTO {
     }
     public sealed interface Response {
          record GetOrderId (int orderId, Timestamp dateCreated, Timestamp lastUpdated, OrderStatus orderStatus) implements Response {}
-         record GetCartItems (int orderId, List<CartItem> orderItemList) implements Response {}
+         record GetCartItems (long orderId, List<CartItem> orderItemList) implements Response {}
 //        record Private(String firstname, String lastname, String email, String password) implements Response {}
 //        record Public (String email, String password) implements Response {}
     }

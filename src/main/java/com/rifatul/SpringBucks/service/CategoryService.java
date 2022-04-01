@@ -1,9 +1,10 @@
 package com.rifatul.SpringBucks.service;
+
 import com.rifatul.SpringBucks.dao.ParentCategoryDao;
 import com.rifatul.SpringBucks.dao.SubCategoryDao;
-import com.rifatul.SpringBucks.domain.dto.CategoryDTO;
-import com.rifatul.SpringBucks.domain.dto.SubCategories;
+import com.rifatul.SpringBucks.domain.dto.CategoriesDto;
 import com.rifatul.SpringBucks.domain.model.Category;
+import com.rifatul.SpringBucks.exception.CategoryDoesNotExistException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,34 +17,31 @@ import java.util.stream.Collectors;
 @Service @RequiredArgsConstructor @Transactional @Slf4j
 public class CategoryService {
 
-    @Autowired
-    private final ParentCategoryDao parentCategoryDao;
-    @Autowired
-    private final SubCategoryDao subCategoryDao;
+    @Autowired private final ParentCategoryDao parentCategoryDao;
+    @Autowired private final SubCategoryDao subCategoryDao;
 
     public List<Category> getAllParentCategories() {
-        List<Category> parentCategories = parentCategoryDao.selectAll();
-        return parentCategories;
+        return parentCategoryDao.selectAll();
     }
 
     public Category getParentCategoryById(int id) {
-        return parentCategoryDao.selectById(id).get();
+        return parentCategoryDao.selectById(id)
+                .orElseThrow(() -> new CategoryDoesNotExistException(id));
     }
 
     public List<Category> getSubCategoriesByParentId(int parentId) {
-        List<Category> subCategoriesByParentId = subCategoryDao.selectByParentId(parentId);
-        return subCategoriesByParentId;
+        return subCategoryDao.selectByParentId(parentId);
     }
 
-    public CategoryDTO.Request getAll() {
+    public List<CategoriesDto> getAll() {
 
-        return new CategoryDTO.Request.GetAll(getAllParentCategories()
+        return getAllParentCategories()
                 .stream()
-                .map(parentCategoryDto -> new CategoryDTO.Child.GetAllByParentId(parentCategoryDto, getSubCategoriesByParentId(parentCategoryDto.id())))
-                .collect(Collectors.toList()));
+                .map(parentCategoryDto -> new CategoriesDto(parentCategoryDto, getSubCategoriesByParentId(parentCategoryDto.id())))
+                .collect(Collectors.toList());
     }
 
-    public SubCategories.GetByParentId getCategoriesByParentId(int id) {
-        return new SubCategories.GetByParentId(getParentCategoryById(id), getSubCategoriesByParentId(id));
+    public CategoriesDto getCategoriesByParentId(int id) {
+        return new CategoriesDto(getParentCategoryById(id), getSubCategoriesByParentId(id));
     }
 }

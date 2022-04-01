@@ -21,7 +21,7 @@ public class CartItemDataAccessService implements CartDao {
     private final JdbcTemplate jdbcTemplate;
 
     @Override
-    public void addCartItem(int orderId, int productId, int quantity) {
+    public void addCartItem(long orderId, int productId, int quantity) {
         var sql = getSQLQuery("add_cartItem");
         jdbcTemplate.update(sql, orderId, productId, quantity);
     }

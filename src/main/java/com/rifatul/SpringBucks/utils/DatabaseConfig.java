@@ -24,16 +24,12 @@ public class DatabaseConfig {
                 .password("pass")
                 .build();
     }
-//
+
 //    @Bean
 //    public static FlywayMigrationStrategy cleanMigrateStrategy() {
-//        System.out.println("cleaning!");
 //        return flyway -> {
-//            System.out.println("yes0");
 //            flyway.repair();
-//            flyway.clean();
-//            System.out.println("yes1");
-//            //flyway.migrate();
+//            flyway.clean();//flyway.migrate();
 //        };
 //    }
 

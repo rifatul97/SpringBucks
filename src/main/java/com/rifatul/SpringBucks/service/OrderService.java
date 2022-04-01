@@ -41,6 +41,7 @@ public class OrderService {
 
 
     private Order createNewUserOrderId(int userId) {
+        log.info("creating new user order Id!");
         long newOrderId = orderDao.createNewId();
         orderDao.mapIdToUser(userId, newOrderId);
         return orderDao.selectById(newOrderId).get();

@@ -4,48 +4,47 @@ import com.rifatul.SpringBucks.dao.OrderDao;
 import com.rifatul.SpringBucks.dao.ProductDao;
 import com.rifatul.SpringBucks.dao.CartDao;
 import com.rifatul.SpringBucks.domain.dto.CartDTO;
-import com.rifatul.SpringBucks.domain.dto.UserDTO;
 import com.rifatul.SpringBucks.domain.model.CartItem;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 import static com.rifatul.SpringBucks.service.UserCartItemsValidatorService.*;
 
+@Service
 public class UserCartItemsService {
 
     @Autowired private CartDao cartDao;
     @Autowired private OrderDao orderDao;
     @Autowired private ProductDao productDao;
 
-    public void addProductToUserCart(CartDTO.Request.AddProduct req) {
-
-        throwExceptionIfProductDoesNotExist(productDao, req.productId());
-        throwExceptionIfOrderDoesNotExistOrInvalid(orderDao, req.orderId())
+    public void addProductToUserCart(long orderId, int productId, int quantity) {
+        throwExceptionIfProductDoesNotExist(productDao, productId);
+        throwExceptionIfOrderDoesNotExistOrInvalid(orderDao, orderId)
                 .ifPresent(found -> checkIfOrderIsNew(found.orderStatus()));
-        throwExceptionIfQuantityIsNegative(req.quantity());
-        throwExceptionIfProductAlreadyOnCart(cartDao, req.orderId(), req.productId());
+        throwExceptionIfQuantityIsNegative(quantity);
+        throwExceptionIfProductAlreadyOnCart(cartDao, orderId, productId);
 
-        cartDao.addCartItem(req.orderId(), req.productId(), req.quantity());
+        cartDao.addCartItem(orderId, productId, quantity);
     }
 
-    public void updateProductToCart(CartDTO.Request.UpdateProduct req) {
-        throwExceptionIfProductDoesNotExist(productDao, req.productId());
-        throwExceptionIfCartItemExist(cartDao, req.cartItemId());
-        throwExceptionIfQuantityIsNegative(req.quantity());
+    public void updateProductToCart(long orderId, int cartItemId, int productId, int quantity) {
+        throwExceptionIfProductDoesNotExist(productDao, productId);
+        throwExceptionIfCartItemDoesNotExist(cartDao, cartItemId);
+        throwExceptionIfQuantityIsNegative(quantity);
+        throwExceptionIfProductAlreadyOnCart(cartDao, orderId, productId);
 
-        cartDao.updateCartItem(req.productId(), req.cartItemId(), req.quantity());
+        cartDao.updateCartItem(cartItemId, productId, quantity);
     }
 
     public void removeProductFromCart(CartDTO.Request.RemoveProduct request) {
-        throwExceptionIfCartItemExist(cartDao, request.cartItemId());
+        throwExceptionIfCartItemDoesNotExist(cartDao, request.cartItemId());
 
         cartDao.deleteCartItem(request.cartItemId());
     }
 
-    public UserDTO.Response.GetCartItems fetchUserCartItems(int orderId) {
-        List<CartItem> userCartItemsInDB = cartDao.selectByOrderId(orderId);
-
-        return new UserDTO.Response.GetCartItems(orderId, userCartItemsInDB);
+    public List<CartItem> fetchUserCartItems(long orderId) {
+        return cartDao.selectByOrderId(orderId);
     }
 }

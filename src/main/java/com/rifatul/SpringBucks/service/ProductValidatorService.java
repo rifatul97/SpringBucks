@@ -1,13 +1,17 @@
 package com.rifatul.SpringBucks.service;
 
+import com.rifatul.SpringBucks.dao.CartDao;
+import com.rifatul.SpringBucks.dao.OrderDao;
 import com.rifatul.SpringBucks.dao.ProductDao;
 import com.rifatul.SpringBucks.dao.SubCategoryDao;
-import com.rifatul.SpringBucks.exception.CategoryDoesNotExistException;
-import com.rifatul.SpringBucks.exception.IncorrectPriceFormatException;
-import com.rifatul.SpringBucks.exception.ProductNameAlreadyExistException;
-import com.rifatul.SpringBucks.exception.ProductNotExistingException;
+import com.rifatul.SpringBucks.domain.model.CartItem;
+import com.rifatul.SpringBucks.domain.model.Order;
+import com.rifatul.SpringBucks.domain.model.OrderStatus;
+import com.rifatul.SpringBucks.exception.*;
 
-import java.math.BigDecimal;
+import java.util.List;
+
+import static com.rifatul.SpringBucks.domain.model.OrderStatus.*;
 
 public class ProductValidatorService {
 
@@ -18,15 +22,6 @@ public class ProductValidatorService {
     }
 
     public static void throwExceptionIfPriceIsIncorrectFormat(Double price) {
-//        System.out.println("scale = " + BigDecimal.valueOf(price).scale());
-//        System.out.println(BigDecimal.valueOf(price).toPlainString().length());
-//        if (BigDecimal.valueOf(price).toPlainString().length() != 4) {
-//
-//            throw new IncorrectPriceFormatException("price cannot exceed the length of 4");
-//        }
-//        if (BigDecimal.valueOf(price).scale() != 2) {
-//            throw new IncorrectPriceFormatException("price format should ##.##");
-//        }
         if (price <= 0) {
             throw new IncorrectPriceFormatException("price cannot be less or equal to 0");
         }
@@ -42,5 +37,20 @@ public class ProductValidatorService {
         if (!productDao.selectByName(name).isEmpty()) {
             throw new ProductNameAlreadyExistException(name);
         }
+    }
+
+    public static void throwExceptionIfProductHadBeenOrdered(int productId, OrderDao orderDao, CartDao cartDao) throws InterruptedException {
+        for(OrderStatus status : List.of(NEW, ONQUEUE, FULFILLING)) {
+            List<Order> orders = orderDao.selectByStatus(status);
+            for (Order order : orders) {
+                List<CartItem> cartItemList = cartDao.selectByOrderId(order.id());
+                for (CartItem cartItem : cartItemList) {
+                    if (cartItem.getProductId() == productId) {
+                        throw new ProductAlreadyOnCartException(order.id(), productId);
+                    }
+                }
+            }
+        }
+        Thread.sleep(2000);
     }
 }
