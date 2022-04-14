@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping(path = "/api/v1/products")
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 36000)
 public class ProductController {
 
     @Autowired private ProductService productService;

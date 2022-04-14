@@ -19,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +27,7 @@ import static com.rifatul.SpringBucks.security.filters.TokenAuthenticationBuilde
 
 @RestController @Slf4j
 @RequestMapping(path = "/api/v1/users")
-//@CrossOrigin(origins = "http://localhost:3000", maxAge = 36000)
+@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
 
     @Autowired private UserService userService;
@@ -47,10 +48,11 @@ public class UserController {
     public ResponseEntity<User> getLoggedInUser() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) {
+        if (authentication == null || authentication.getName().equalsIgnoreCase("anonymousUser")) {
             return ResponseEntity.notFound().build();
         }
         String currentPrincipalName = authentication.getName();
+        System.out.println("currentPrincipalname = " + currentPrincipalName);
         Optional<User> user = userService.findUserByEmail(currentPrincipalName);
 
         return ResponseEntity.ok(user.get());
@@ -70,8 +72,9 @@ public class UserController {
     }
 
     @GetMapping("/hello")
-    public String hello(@CurrentSecurityContext(expression="authentication?.name") String username) {
-        return username;
+    public String hello(Principal principal ) {
+        String name = principal.getName();
+        return name;
     }
 
 }

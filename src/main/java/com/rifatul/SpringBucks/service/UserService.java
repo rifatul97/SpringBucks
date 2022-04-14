@@ -43,11 +43,16 @@ public class UserService {
         return userDao.selectByEmail(request.email()).get();
     }
 
-    public void updateUserRole(UserDTO.Request.UpdateRole request) {
-        throwExceptionIfUserIdDoesNotExist(request.userId(), userDao);
-        throwExceptionIfRoleIdDoesNotExist(request.roleId(), roleDao);
+    public void addUserRole(int userId, int roleId)  {
+        throwExceptionIfUserIdDoesNotExist(userId, userDao);
+        throwExceptionIfRoleIdDoesNotExist(roleId, roleDao);
 
-        roleDao.update(request.userId(), request.roleId());
+        roleDao.updateUserRole(userId, roleId);
     }
 
+    public void removeUserRole(int userId) {
+        throwExceptionIfUserIdDoesNotExist(userId, userDao);
+
+        roleDao.updateUserRole(userId, 1);
+    }
 }

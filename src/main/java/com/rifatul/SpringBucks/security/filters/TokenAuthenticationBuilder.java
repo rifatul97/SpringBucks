@@ -61,9 +61,6 @@ public class TokenAuthenticationBuilder {
     static void addAuthentication(HttpServletRequest request, HttpServletResponse res, Authentication authResult) {
 
         User user = (User) authResult.getPrincipal();
-        //http://localhost:8080/api/v1/users/login
-        System.out.println("issuer = " + request.getRequestURL().toString());
-        System.out.println(user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()).toString());
         Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
         String access_token = JWT.create()
                 .withSubject(user.getUsername())
@@ -78,7 +75,7 @@ public class TokenAuthenticationBuilder {
         cookie.setPath("/");
         res.addCookie(cookie);
         res.addHeader("Access-Control-Allow-Credentials", "true");
-        res.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+//        res.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");
 
         System.out.println("finale.." + res.getStatus());
         System.out.println("access token: " + access_token);

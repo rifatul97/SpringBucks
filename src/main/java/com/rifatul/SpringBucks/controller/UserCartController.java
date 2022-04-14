@@ -27,17 +27,15 @@ public class UserCartController {
     @Autowired private OrderService orderService;
 
     @GetMapping
-    public ResponseEntity<List<CartItem>> getUserCartItems () {
+    public ResponseEntity<CartDTO.Response.Items> getUserCartItems () {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
             return ResponseEntity.notFound().build();
         }
-        String currentPrincipalName = authentication.getName();
-        Optional<User> user = userService.findUserByEmail(currentPrincipalName);
-        Order order = orderService.getUserOrderId(user.get().id());
+        Order ord = orderService.getUserOrderId(userService.findUserByEmail(authentication.getName()).get().id());
 
 
-        return ResponseEntity.ok(cartItemsService.fetchUserCartItems(order.id()));
+        return ResponseEntity.ok(new CartDTO.Response.Items(ord, cartItemsService.fetchUserCartItems(ord.id())));
     }
 
     @PostMapping("/add")

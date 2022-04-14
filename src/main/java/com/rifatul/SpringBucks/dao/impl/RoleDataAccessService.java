@@ -20,14 +20,14 @@ public class RoleDataAccessService implements RoleDao {
     private final JdbcTemplate jdbcTemplate;
 
     @Override
-    public List<Role> getRoles(int userId) {
+    public List<Role> selectByUserId(int userId) {
         var sql = getSQLQuery("select_user_roles");
         return jdbcTemplate.query(sql, new RoleRowMapper(), userId);
     }
 
     @Override
-    public void update(int userId, int roleId) {
-        var updateUserRole = getSQLQuery("update_user_role");
-        jdbcTemplate.update(updateUserRole, userId, roleId);
+    public void updateUserRole(int userId, int roleId) {
+        var updateUserRole = getSQLQuery("add_user_role");
+        jdbcTemplate.update(updateUserRole, roleId, userId);
     }
 }

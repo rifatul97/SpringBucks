@@ -6,9 +6,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -18,6 +22,7 @@ import java.io.IOException;
 import static com.rifatul.SpringBucks.security.filters.TokenAuthenticationBuilder.addAuthentication;
 
 @Slf4j
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 36000)
 public class CustomAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
     public CustomAuthenticationFilter(String url, AuthenticationManager authManager) {
@@ -30,13 +35,13 @@ public class CustomAuthenticationFilter extends AbstractAuthenticationProcessing
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
-            System.out.println("attempting NOW ---");
+            log.info("attempting authentication");
             AccountCredentials creds = new ObjectMapper().readValue(request.getInputStream(), AccountCredentials.class);
-            log.info("{}", creds.email());
+            log.info("entered: email= {} password= {}", creds.email(), creds.password());
             return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(creds.email(), creds.password() //,Collections.emptyList()
             ));
         } catch (IOException e) {
-            response.setStatus(333);
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.setContentType(e.getMessage());
         }
 
@@ -48,17 +53,15 @@ public class CustomAuthenticationFilter extends AbstractAuthenticationProcessing
                                             HttpServletResponse response,
                                             FilterChain chain, Authentication authResult) throws IOException, ServletException {
         addAuthentication(request, response, authResult);
-//        response.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-//        response.addHeader("Access-Control-Allow-Credentials", "true");
-
-//        response.addHeader("Location", "http://localhost:3000/");
-        System.out.println("SUCCESSFULLY AUTHENTICATED :^)");
+        System.out.println(authResult.isAuthenticated());
+        log.info(authResult.getName());
+        log.info("SUCCESSFULLY AUTHENTICATED :^)");
     }
 
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-//        response.addHeader("Access-Control-Allow-Credentials", "true");
-//        response.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+    protected void unsuccessfulAuthentication(HttpServletRequest request,
+                                              HttpServletResponse response,
+                                              AuthenticationException failed) throws IOException, ServletException {
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication Failed");
     }
 

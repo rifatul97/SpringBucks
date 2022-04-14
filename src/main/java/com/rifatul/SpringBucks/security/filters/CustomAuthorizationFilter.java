@@ -33,7 +33,9 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     private AntPathMatcher pathMatcher = new AntPathMatcher();
 
     public static final List<String> NON_AUTH_END_POINTS
-            = Collections.unmodifiableList(Arrays.asList("/", "/api/v1/categories", "/api/v1/products", "/api/v1/products/update"));
+            = Collections.unmodifiableList(Arrays.asList("/", "/api/v1/categories",
+            "/api/v1/products", "/api/v1/products/update", "/api/v1/categories/search"));
+//            ,"/api/v1/users/current", "/api/v1/users/hello"));
 
     //@CrossOrigin(origins = "http://localhost:3000")
     @Override
@@ -42,7 +44,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         //response.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");
         System.out.println("request = " + request.getServletPath().toString());
 
-        if (request.getServletPath().equals("/") || request.getServletPath().equals("/api/v1/users/login") || request.getServletPath().equals("/api/v1/users/register")){ //|| request.getServletPath().equals("/api/v1/users/register")) {
+        if (request.getServletPath().equals("/") || request.getServletPath().equals("/api/v1/users/register")){ //|| request.getServletPath().equals("/api/v1/users/register")) {
             System.out.println("filter if");
             filterChain.doFilter(request, response);
         } else {

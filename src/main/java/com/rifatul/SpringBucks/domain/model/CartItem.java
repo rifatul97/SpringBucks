@@ -8,11 +8,4 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-@Data @AllArgsConstructor @NoArgsConstructor
-public class CartItem implements Serializable {
-    private int id;
-    private int orderId;
-    private int productId;
-    private int quantity;
-    private Timestamp lastUpdated;
-}
+public record CartItem (int id, int orderId, int productId, int quantity, Timestamp lastUpdated) {}

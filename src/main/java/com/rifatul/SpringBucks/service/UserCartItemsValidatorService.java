@@ -46,7 +46,7 @@ public class UserCartItemsValidatorService {
     public static void throwExceptionIfProductAlreadyOnCart (CartDao cartDao, long orderId, int productId) {
         List<CartItem> cartItemList = cartDao.selectByOrderId(orderId);
         for (CartItem item : cartItemList) {
-            if (item.getProductId() == productId) {
+            if (item.productId() == productId) {
                 throw new ProductAlreadyOnCartException(orderId, productId);
             }
         }

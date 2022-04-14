@@ -8,6 +8,7 @@ import com.rifatul.SpringBucks.domain.model.CartItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.rifatul.SpringBucks.service.UserCartItemsValidatorService.*;
@@ -44,7 +45,17 @@ public class UserCartItemsService {
         cartDao.deleteCartItem(request.cartItemId());
     }
 
-    public List<CartItem> fetchUserCartItems(long orderId) {
-        return cartDao.selectByOrderId(orderId);
+    public List<CartDTO.Response.ItemById> fetchUserCartItems(long orderId) {
+        List<CartItem> userCartItems = cartDao.selectByOrderId(orderId);
+        List<CartDTO.Response.ItemById> item = new ArrayList<>();
+        for (CartItem cartItem : userCartItems) {
+            item.add(new CartDTO.Response.ItemById(cartItem.id(), productDao.selectById(cartItem.productId()).get(), cartItem.quantity()));
+        }
+
+        return item;
     }
+    /**
+     record ItemById (int cartItemId, String productName, int quantity) implements Response {}
+     record Items (Order order, List<ItemById> items) implements Response {} <------
+     */
 }

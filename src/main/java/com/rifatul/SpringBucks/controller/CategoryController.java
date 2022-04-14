@@ -30,4 +30,9 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.getAll());
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<Category> getByName(@RequestParam(value = "name") String name) {
+        return ResponseEntity.ok(categoryService.getByName(name.replace("-", " ")));
+    }
+
 }

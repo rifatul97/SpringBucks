@@ -44,4 +44,18 @@ public class CategoryService {
     public CategoriesDto getCategoriesByParentId(int id) {
         return new CategoriesDto(getParentCategoryById(id), getSubCategoriesByParentId(id));
     }
+
+    public Category getByName(String name) {
+       for (CategoriesDto categoriesDtos : getAll()) {
+           if (categoriesDtos.parent().name().equalsIgnoreCase(name)) {
+               return categoriesDtos.parent();
+           }
+           for (Category category : categoriesDtos.child()) {
+               if (category.name().equalsIgnoreCase(name)) {
+                   return category;
+               }
+           }
+       }
+       return null;
+    }
 }

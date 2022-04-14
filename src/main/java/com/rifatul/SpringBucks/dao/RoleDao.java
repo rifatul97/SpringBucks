@@ -7,7 +7,7 @@ import java.util.List;
 
 @Service
 public interface RoleDao {
-    List<Role> getRoles(int id);
-    void update(int userId, int roleId);
+    List<Role> selectByUserId(int id);
+    void updateUserRole(int userId, int roleId);
 }
 

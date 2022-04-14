@@ -11,7 +11,8 @@ public final class UserDTO {
     public sealed interface Request {
         record Register (String firstname, String lastname, String email, String password) implements Request {}
         record LoginInfo (String email, String password) implements Request {}
-        record UpdateRole (int userId, int roleId) implements Request {}
+        record AddRole (int userId, int roleId) implements Request {}
+        record RemoveRole (int userId) implements Request {}
     }
     public sealed interface Response {
          record GetOrderId (int orderId, Timestamp dateCreated, Timestamp lastUpdated, OrderStatus orderStatus) implements Response {}

@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,6 +26,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 36000)
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired private final UserDao userDao;
@@ -36,7 +38,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         log.info("loading user by username");
         User user = userDao.selectByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("it is not found."));
-        List<Role> userRoles = roleDao.getRoles(user.id());
+        List<Role> userRoles = roleDao.selectByUserId(user.id());
         log.info("user's roles are {}", userRoles.toString());
         return new org.springframework.security.core.userdetails.User(
                 user.email(), passwordEncoder.encode(user.password()), getUserAuthorities(userRoles));

@@ -93,8 +93,16 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("if user logout and return status 200 OK")
+    @DisplayName("displays correct current login user email")
     public void test5b() throws Exception {
+        mockMvc.perform(get(current_login_username))
+                .andExpect(status().isOk())
+                .andExpect(content().string("rifat97@gmail.com"));
+    }
+
+    @Test
+    @DisplayName("if user logout and return status 200 OK")
+    public void test5c() throws Exception {
         mockMvc.perform(post(user_logout))
                 .andExpect(status().isOk());
     }

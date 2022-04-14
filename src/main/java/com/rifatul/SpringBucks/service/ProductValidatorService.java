@@ -45,12 +45,11 @@ public class ProductValidatorService {
             for (Order order : orders) {
                 List<CartItem> cartItemList = cartDao.selectByOrderId(order.id());
                 for (CartItem cartItem : cartItemList) {
-                    if (cartItem.getProductId() == productId) {
+                    if (cartItem.productId() == productId) {
                         throw new ProductAlreadyOnCartException(order.id(), productId);
                     }
                 }
             }
         }
-        Thread.sleep(2000);
     }
 }
