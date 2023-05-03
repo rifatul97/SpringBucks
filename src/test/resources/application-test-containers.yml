@@ -1,10 +1,10 @@
-spring:
-  datasource:
-    url: jdbc:tc:postgresql://localhost:5432/somedb
-    username: postgres
-    password: pass
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
+#spring:
+#  datasource:
+#    url: jdbc:tc:postgresql://localhost:5432/test_database
+#    username: postgres
+#    password: pass
+#  jpa:
+#    hibernate:
+#      ddl-auto: create-drop
 #  flyway:
-#    enabled: false
+#    enabled: true

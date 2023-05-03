@@ -44,12 +44,14 @@ public class ProductDataAccessService implements ProductDao {
 
     @Override
     public void deleteProduct(int productId) {
-
+        var sql = getSQLQuery("delete_product_by_id");
+        jdbcTemplate.update(sql, productId);
     }
 
     @Override
     public void save(String name, double price, int categoryId) {
-
+        var sql = getSQLQuery("insert_product_by_id");
+        jdbcTemplate.update(sql, name, price, categoryId);
     }
 
 }

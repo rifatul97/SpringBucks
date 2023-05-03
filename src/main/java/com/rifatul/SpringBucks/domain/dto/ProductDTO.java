@@ -1,11 +1,18 @@
 package com.rifatul.SpringBucks.domain.dto;
 
+import java.util.List;
+
 public final class ProductDTO {
 
     public abstract sealed interface Request {
         record Create (String name, double price, int categoryId) implements Request {}
         record Update (int id, double price, int categoryId) implements Request {}
         record Delete (int id) implements Request {}
+    }
+
+    public abstract sealed interface Response {
+        record GetByCategoryId (int productId, String name, double price, int categoryId) implements Response {}
+        record GetAll (List<GetByCategoryId> products) implements Response {}
     }
 
 

@@ -1,4 +1,3 @@
-
 app:
   datasource:
     main:
@@ -7,13 +6,8 @@ app:
       username: postgres
       password: 'pass'
       pool-size: 30
-#    jpa:
-#      hibernate:
-#        ddl-auto: update
-#
-#  jpa:
-#    hibernate:
-#      ddl-auto: update
+  flyway:
+    enabled: true
 
 server:
   error:

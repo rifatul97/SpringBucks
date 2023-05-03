@@ -13,5 +13,6 @@ public interface UserDao {
     Optional<User> selectById(int id);
     Optional<User> selectByEmail(String email);
     Optional<User> selectByEmailAndPassword(String email, String password);
+    void deleteAll();
 }
 

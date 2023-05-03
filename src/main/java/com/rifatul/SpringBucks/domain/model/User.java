@@ -7,8 +7,4 @@ public record User(int id,
                    String email, String password,
                    Timestamp createdAt) {
 
-    public String getFullName() {
-        return this.firstname() + " " + this.lastname();
-    }
-
 }

@@ -29,6 +29,9 @@ public class CartItemDataAccessService implements CartDao {
     @Override
     public void updateCartItem(int cartItemId, int productId, int quantity) {
         var sql = getSQLQuery("update_cartItem");
+        System.out.println("productid = " + productId);
+        System.out.println("quantity = " + quantity);
+        System.out.println("cartitemid = " + cartItemId);
         jdbcTemplate.update(sql, productId, quantity, cartItemId);
     }
 

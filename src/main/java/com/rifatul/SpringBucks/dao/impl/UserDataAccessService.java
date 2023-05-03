@@ -28,6 +28,7 @@ public class UserDataAccessService implements UserDao {
     @Override
     public void insert(String firstname, String lastname, String email, String password) {
         log.info("step 3.7");
+        log.info("firstname = {} lastname = {} email = {} password = {}", firstname, lastname, email, password);
         var insertUser = getSQLQuery("insert_user");
         var insertUserRole = getSQLQuery("insert_user_roles");
         jdbcTemplate.update(
@@ -64,6 +65,12 @@ public class UserDataAccessService implements UserDao {
         return jdbcTemplate.query(sql, new UserRowMapper(), email, password)
                 .stream()
                 .findFirst();
+    }
+
+    @Override
+    public void deleteAll() {
+        var sql = getSQLQuery("delete_all_users");
+        jdbcTemplate.execute(sql);
     }
 
 

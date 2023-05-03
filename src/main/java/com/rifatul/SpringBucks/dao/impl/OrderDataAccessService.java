@@ -50,14 +50,25 @@ public class OrderDataAccessService implements OrderDao {
     @Override
     public Optional<Order> selectByUserId(int userId) {
         var sql = getSQLQuery("select_orderId_by_userId");
-        log.info("getting em it!");
         return jdbcTemplate.query(sql, new OrderRowMapper(), userId).stream().findFirst();
     }
 
     @Override
     public void updateStatus(int orderId, OrderStatus newStatus) {
         var sql = getSQLQuery("update_order_status");
-        jdbcTemplate.update(sql, orderId, newStatus.toString());
+        jdbcTemplate.update(sql, newStatus.toString(),orderId);
+    }
+
+    @Override
+    public void deleteUserOrderLink(int userId) {
+        var sql = getSQLQuery("delete_user_orderId_link");
+        jdbcTemplate.update(sql, userId);
+    }
+
+    @Override
+    public void archiveUserCompletedOrder(int userId, int orderId) {
+        var sql = getSQLQuery("create_user_order_archive");
+        jdbcTemplate.update(sql, userId, orderId);
     }
 
 }

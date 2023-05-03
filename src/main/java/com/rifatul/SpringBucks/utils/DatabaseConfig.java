@@ -24,7 +24,7 @@ public class DatabaseConfig {
                 .password("pass")
                 .build();
     }
-
+//
 //    @Bean
 //    public static FlywayMigrationStrategy cleanMigrateStrategy() {
 //        return flyway -> {

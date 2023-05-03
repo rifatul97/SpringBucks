@@ -4,6 +4,7 @@ import com.rifatul.SpringBucks.dao.RoleDao;
 import com.rifatul.SpringBucks.dao.UserDao;
 import com.rifatul.SpringBucks.domain.model.Role;
 import com.rifatul.SpringBucks.domain.model.User;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +24,9 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Transactional
 @Slf4j
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 36000)
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired private final UserDao userDao;
@@ -34,12 +34,12 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        log.info("loading user by username");
+    public UserDetails loadUserByUsername(String email) {
         User user = userDao.selectByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("it is not found."));
+                .orElseThrow(() -> new UsernameNotFoundException("The user with the email not found!"));
+
         List<Role> userRoles = roleDao.selectByUserId(user.id());
-        log.info("user's roles are {}", userRoles.toString());
+
         return new org.springframework.security.core.userdetails.User(
                 user.email(), passwordEncoder.encode(user.password()), getUserAuthorities(userRoles));
     }
@@ -49,7 +49,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         userRoles.forEach((role) -> {
             roles.add(new SimpleGrantedAuthority(role.name()));
         });
-        return new ArrayList<GrantedAuthority>(roles);
+        System.out.println(roles.toString());
+        System.out.println(new ArrayList<>(roles).toString());
+
+        return new ArrayList<>(roles);
     }
 
 }

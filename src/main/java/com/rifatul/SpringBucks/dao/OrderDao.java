@@ -13,4 +13,6 @@ public interface OrderDao {
     Optional<Order> selectByUserId(int userId);
     void mapIdToUser(int userId, long orderId);
     void updateStatus(int orderId, OrderStatus orderStatus);
+    void deleteUserOrderLink(int userId);
+    void archiveUserCompletedOrder(int userId, int orderId);
 }
